@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 @Controller
+@RequestMapping("")
 public class SocialMediaController {
     
 
