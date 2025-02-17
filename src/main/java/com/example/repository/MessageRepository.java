@@ -14,12 +14,13 @@ import com.example.entity.Message;
 
 public interface MessageRepository extends JpaRepository<Message,Integer> 
 {
+    
 
     @Modifying
     @Query("DELETE FROM message WHERE messageId=:id")
     int deleteMessage(@Param("id") int id);
 
-    @Query("SELECT * FROM message WHERE accountId=:id ")
+    @Query("SELECT * FROM message WHERE account.accountId=:id ")
     List<Message> getMessageByUser(@Param("id") int id);
 
     List<Message> findByUserId(@Param("accountId")int accountId);
