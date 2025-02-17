@@ -53,7 +53,10 @@ public class MessageService
          return Optional.ofNullable(null);
     }
 
-    public message
+    public List<Message> getMessageByUser(int postedBy)
+    {
+        return messageRepository.findByUserId(postedBy);
+    }
 
 
     

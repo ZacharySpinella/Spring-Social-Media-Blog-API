@@ -20,8 +20,8 @@ public interface MessageRepository extends JpaRepository<Message,Integer>
     @Query("DELETE FROM Message WHERE messageId=:id")
     int deleteMessage(@Param("id") int id);
 
-    @Query("SELECT * FROM message WHERE account.accountId=:id ")
+    @Query("SELECT * FROM message WHERE postedBy=:id ")
     List<Message> getMessageByUser(@Param("id") int id);
 
-    List<Message> findByUserId(@Param("accountId")int accountId);
+    List<Message> findByUserId(@Param("postedBy")int postedBy);
 }
