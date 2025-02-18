@@ -8,26 +8,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.Message;
+import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 
 @Service
 public class MessageService 
 {
-    private List<Message> messages= new ArrayList<>();
 
     private MessageRepository messageRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository)
+    public MessageService(MessageRepository messageRepository,AccountRepository accountRepository)
     {
         this.messageRepository=messageRepository;
+        this.accountRepository=accountRepository;
     }
-    {Message message= new Message(1,"1",1L);}
 
     public void createMessage(Message message)
     {
     if(!(message.getMessageText().isEmpty()||message.getMessageText().length()>225
-    ||!messageRepository.existsById(message.getPostedBy())))
+    ||!accountRepository.existsById(message.getPostedBy())))
     {
         messageRepository.save(message);
     }
@@ -39,23 +40,36 @@ public class MessageService
         return messageRepository.findAll();
     }
 
-    public Message getMessageById(int id)
+    public Optional<Message> getMessageById(int id)
     {
-        return messageRepository.getById(id);
+        return messageRepository.findById(id);
     }
 
-    public Optional<Integer> deleteMessageById(int id)
+    public Optional<Integer> deleteMessageById(int messageId)
     {
-         if(messageRepository.deleteMessage(id) == 1)
+         if(messageRepository.findById(messageId)==null)
          {
-            return Optional.of(messageRepository.deleteMessage(id));
+            return Optional.empty();
          }
-         return Optional.ofNullable(null);
+         return Optional.of(messageRepository.deleteMessage(messageId));
     }
 
     public List<Message> getMessageByUser(int postedBy)
     {
-        return messageRepository.findByUserId(postedBy);
+        return messageRepository.findByPostedBy(postedBy);
+    }
+
+    public int updateMessage(String messageText, int id)
+    {
+        if(messageText.isEmpty()||messageText.length()>225||messageRepository.existsById(id))
+        {return 0;}
+        return messageRepository.updateMessage(messageText,id);
+
+    }
+
+    public List<Message> getMessagesByUser(int postedBy)
+    {
+        return messageRepository.findByPostedBy(postedBy);
     }
 
 
