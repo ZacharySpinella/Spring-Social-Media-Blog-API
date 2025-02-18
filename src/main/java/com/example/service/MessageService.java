@@ -27,15 +27,18 @@ public class MessageService
 
     public int createMessage(Message message)
     {
-    if(!(message.getMessageText().isEmpty()||message.getMessageText().length()>255
-    ||!accountRepository.existsById(message.getPostedBy())))
+    System.out.println("\n\n"+message.toString()+"\n\tMessageService"+"\n\n");
+    boolean exists = accountRepository.existsById(message.getPostedBy());
+    System.out.println(exists); 
+    if(message.getMessageText().isEmpty()||message.getMessageText().length()>255
+    ||!accountRepository.existsById(message.getPostedBy()))
     {
-        System.out.println("\n\n"+message.toString()+"\n\n");
-        messageRepository.createMessage(message.getPostedBy(), message.getMessageText(), message.getTimePostedEpoch());
-
-        return 1;
+        System.out.println("\n\nNO MESSAGE CREATED\n\tMessageService\n\n");
+        return 0;
     }
-    return 0;
+    System.out.println("\n\n"+message.toString()+"\n\tMessageService"+"\n\n");
+    messageRepository.save(message);
+    return 1;
 
     }
 
