@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +31,9 @@ public class SocialMediaController {
     }
 
     @PostMapping("messages")
-    public @ResponseBody ResponseEntity<Message> createMessage(Message message)
+    public @ResponseBody ResponseEntity<List<Message>> createMessage(Message message)
     {
-        messageService.createMessage(message);
-        if(messageService.getMessageByUser(message.getPostedBy())!=null){
+        if(messageService.createMessage(message)==1){
         return ResponseEntity.status(200).body(messageService.getMessageByUser(message.getPostedBy()));
         }
         return ResponseEntity.status(400).body(null);

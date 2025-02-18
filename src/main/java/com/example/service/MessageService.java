@@ -25,13 +25,17 @@ public class MessageService
         this.accountRepository=accountRepository;
     }
 
-    public void createMessage(Message message)
+    public int createMessage(Message message)
     {
-    if(!(message.getMessageText().isEmpty()||message.getMessageText().length()>225
+    if(!(message.getMessageText().isEmpty()||message.getMessageText().length()>255
     ||!accountRepository.existsById(message.getPostedBy())))
     {
-        messageRepository.save(message);
+        System.out.println("\n\n"+message.toString()+"\n\n");
+        messageRepository.createMessage(message.getPostedBy(), message.getMessageText(), message.getTimePostedEpoch());
+
+        return 1;
     }
+    return 0;
 
     }
 
@@ -47,7 +51,7 @@ public class MessageService
 
     public Optional<Integer> deleteMessageById(int messageId)
     {
-         if(messageRepository.findById(messageId)==null)
+         if(messageRepository.findById(messageId).isPresent())
          {
             return Optional.empty();
          }
@@ -61,13 +65,13 @@ public class MessageService
 
     public int updateMessage(String messageText, int id)
     {
-        if(messageText.isEmpty()||messageText.length()>225||messageRepository.existsById(id))
+        if(messageText.isEmpty()||messageText.length()>225||!messageRepository.existsById(id))
         {return 0;}
         return messageRepository.updateMessage(messageText,id);
 
     }
 
-    public List<Message> getMessagesByUser(int postedBy)
+    public List<Message> getAllByUser(int postedBy)
     {
         return messageRepository.findByPostedBy(postedBy);
     }
