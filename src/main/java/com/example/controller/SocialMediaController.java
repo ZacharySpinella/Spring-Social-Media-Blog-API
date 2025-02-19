@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.entity.Account;
 import com.example.entity.Message;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
@@ -28,6 +29,25 @@ public class SocialMediaController {
     {
         this.messageService=messageService;
         this.accountService=accountService;
+    }
+
+    @PostMapping("register")
+    public @ResponseBody ResponseEntity<Account> createAccount(@RequestBody Account account)
+    {
+        if(accountService.createAccount(account)==1)
+        {
+            Account acc= accountService.getAccountByUsername(account.getUsername());
+            return ResponseEntity.status(200).body(acc);
+        }
+        return(accountService.createAccount(account)==0) ? ResponseEntity.status(400).body(null) : ResponseEntity.status(409).body(null);
+    }
+
+    @PostMapping("login")
+    public @ResponseBody ResponseEntity<Account> login(@RequestBody Account account)
+    {
+        return (accountService.accountLogin(account)==1) ? 
+        ResponseEntity.status(200).body(accountService.getAccountByUsername(account.getUsername())) 
+        : ResponseEntity.status(401).body(null);
     }
 
     @PostMapping("messages")
