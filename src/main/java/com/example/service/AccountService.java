@@ -36,12 +36,8 @@ public class AccountService {
             return 0;
         }
         Account acc= accountRepository.findByUsername(account.getUsername()).get();
-        if(acc.getPassword()!=account.getPassword())
-        {
-            return 0;
-        }
+        return acc.getPassword().equals(account.getPassword()) ? 1 : 0;
 
-        return 1;
     }
     
     public Account getAccountByUsername(String username)

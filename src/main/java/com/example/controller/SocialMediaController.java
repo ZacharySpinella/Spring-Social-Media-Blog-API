@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,7 +42,8 @@ public class SocialMediaController {
             Account acc= accountService.getAccountByUsername(account.getUsername());
             return ResponseEntity.status(200).body(acc);
         }
-        return(accountService.createAccount(account)==0) ? ResponseEntity.status(400).body(null) : ResponseEntity.status(409).body(null);
+        return(accountService.createAccount(account)==0) ? ResponseEntity.status(400).body(null)
+         : ResponseEntity.status(409).body(null);
     }
 
     @PostMapping("login")
@@ -48,6 +52,19 @@ public class SocialMediaController {
         return (accountService.accountLogin(account)==1) ? 
         ResponseEntity.status(200).body(accountService.getAccountByUsername(account.getUsername())) 
         : ResponseEntity.status(401).body(null);
+    }
+
+    @GetMapping("messages")
+    public @ResponseBody ResponseEntity<List<Message>> getAllMessages()
+    {
+        return ResponseEntity.status(200).body(messageService.getAllMessages());
+    }
+
+    @GetMapping("messages/{messageId}")
+    public @ResponseBody ResponseEntity<Message> getMessageById(@PathVariable int messageId)
+    {
+        return ResponseEntity.status(200).
+        body(messageService.getMessageById(messageId).isPresent() ?messageService.getMessageById(messageId).get(): null);
     }
 
     @PostMapping("messages")
@@ -62,4 +79,9 @@ public class SocialMediaController {
         return ResponseEntity.status(400).body(null);
     }
 
+    @DeleteMapping("messages/{messageId}")
+    public ResponseEntity<Integer> deleteMessage(@PathVariable int messageId)
+    {
+        return ResponseEntity.status(200).body(messageService.deleteMessageById(messageId).get());
+    }
 }
