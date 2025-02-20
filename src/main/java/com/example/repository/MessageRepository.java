@@ -16,13 +16,8 @@ import com.example.entity.Message;
 public interface MessageRepository extends JpaRepository<Message,Integer> 
 {
     
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM Message m WHERE m.messageId=:id")
-    int deleteMessage(@Param("id") int id);
-
+  
     List<Message> findByPostedBy(int postedBy);
-
 
     @Modifying
     @Transactional
